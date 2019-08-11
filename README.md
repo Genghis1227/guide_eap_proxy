@@ -47,6 +47,15 @@ Copy using binary mode eap_proxy.sh to /config/scripts/post-config.d/
 
 Copy using binary mode eap_proxy.py to /config/scripts/
 
+Edit the eap_proxy.sh file that as just uploaded in WinSCP (Go to //root/config/scripts/post-config.d > Right-click on file > Edit)
+
+![Editing eap_proxy.sh](https://i.imgur.com/u1NZa1D.png)
+
+Change the options as such (by default IF_ROUTER is set to eth2):
+
+	IF_WAN=eth0
+	IF_ROUTER=eth1
+
 Connect to ERL with Putty
 
 Change permissions of files for execution using the following commands
