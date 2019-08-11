@@ -15,19 +15,19 @@ This guide configures the ERL with the following for the ports:
 
 ## Setup
 
-Install WinSCP (https://winscp.net/eng/index.php) - To transfer files
+Install [WinSCP](https://winscp.net/eng/index.php) - To transfer files
 
-Install Putty (https://www.putty.org/) - To configure the router
+Install [Putty](https://www.putty.org/) - To configure the router
 
 From a reset ERL
 
 Plug in a computer to eth0
 
-Set IP of computer to 192.168.1.100, 255.255.255.0, 192.168.1.1 (https://www.thewindowsclub.com/change-ip-address-windows-10)
+Set IP of computer to 192.168.1.100, 255.255.255.0, 192.168.1.1 [How to: Change IP address in Windows](https://www.thewindowsclub.com/change-ip-address-windows-10)
 
 Login to the ERL EdgeOS by going to https://192.168.1.1 in your browser
 
-## Backup Original Configuration
+## Backup original configuration
 
 Backup config of the ERL (System > Back Up Config) - Old firmware
 
@@ -260,7 +260,7 @@ Once everything returns and committed then "exit" from the configure mode
 
 ## Hooking everything up
 
-Enter the following to monitor the data:
+Enter the following in putty to monitor the data:
 
 	sudo /usr/bin/python /config/scripts/eap_proxy.py eth0 eth1 --restart-dhcp --ignore-when-wan-up --ignore-logoff --ping-gateway
 
