@@ -250,7 +250,9 @@ Then, copy & paste the following:
 	
 Once everything returns and committed then "exit" from the configure mode
 
-Enter sudo /usr/bin/python /config/scripts/eap_proxy.py eth0 eth1 --restart-dhcp --ignore-when-wan-up --ignore-logoff --ping-gateway
+Enter the following to monitor the data:
+
+	sudo /usr/bin/python /config/scripts/eap_proxy.py eth0 eth1 --restart-dhcp --ignore-when-wan-up --ignore-logoff --ping-gateway
 
 Plug in cable in from ONT to eth0
 
@@ -261,7 +263,10 @@ Plug in cable out to LAN from eth2
 In you should see EAPOL start with a whole bunch of communication
 
 Log into the EdgeOS (https://192.168.2.254/) to see everything setup with:
+
 	WAN (eth0) as 192.168.1.1
 	WAN VLAN 0 (eth0.0) with WAN IP
 	AT&T Router (eth1) has no IP
 	LAN (eth2) as 192.168.2.254
+
+![Configured ERL with Bypass](https://i.imgur.com/LrEg9WW.png)
