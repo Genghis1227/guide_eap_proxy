@@ -19,7 +19,7 @@ Install [WinSCP](https://winscp.net/eng/index.php) - To transfer files
 
 Install [Putty](https://www.putty.org/) - To configure the router
 
-From a reset ERL
+From a factory reset ERL
 
 Plug in a computer to eth0
 
