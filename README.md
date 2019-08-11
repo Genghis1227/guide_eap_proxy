@@ -25,7 +25,7 @@ From a factory reset ERL
 
 Plug in a computer to eth0
 
-Set IP of computer to 192.168.1.100, 255.255.255.0, 192.168.1.1 [How to: Change IP address in Windows](https://www.thewindowsclub.com/change-ip-address-windows-10)
+Set IP of computer to 192.168.1.100, 255.255.255.0, 192.168.1.1 - [How to: Change IP address in Windows](https://www.thewindowsclub.com/change-ip-address-windows-10)
 
 Login to the ERL EdgeOS by going to https://192.168.1.1 in your browser
 
