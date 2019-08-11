@@ -13,7 +13,7 @@ This guide configures the ERL with the following for the ports:
 	eth1 = AT&T Router
 	eth2 = LAN
 
-## Setup
+## 1. Setup
 
 Install [WinSCP](https://winscp.net/eng/index.php) - To transfer files
 
@@ -27,7 +27,7 @@ Set IP of computer to 192.168.1.100, 255.255.255.0, 192.168.1.1 [How to: Change 
 
 Login to the ERL EdgeOS by going to https://192.168.1.1 in your browser
 
-## Backup original configuration
+## 2. Backup original configuration
 
 Backup config of the ERL (System > Back Up Config) - Old firmware
 
@@ -37,7 +37,7 @@ Upgrade firmware of device (if desired) (System > Upgrade System Image)
 
 Backup config of the ERL (System > Back Up Config) - New firmware
 
-## Transfer EAP_Proxy files
+## 3. Transfer EAP_Proxy files
 
 Downloaded eap-proxy files from: https://github.com/jaysoffian/eap_proxy
 
@@ -54,7 +54,7 @@ Change permissions of files for execution using the following commands
 	sudo chmod +x /config/scripts/post-config.d/eap_proxy.sh
 	sudo chmod +x /config/scripts/eap_proxy.py
 	
-## Configure the router
+## 4. Configure the router
 
 Configure router using the below, this will setup the firewall, all interfaces and give you working IPv6
 
@@ -258,7 +258,7 @@ Then, copy & paste the following:
 	
 Once everything returns and committed then "exit" from the configure mode
 
-## Hooking everything up
+## 5. Hooking everything up
 
 Enter the following in putty to monitor the data:
 
@@ -279,4 +279,8 @@ Log into the EdgeOS (https://192.168.2.254/) to see everything setup with:
 	AT&T Router (eth1) has no IP
 	LAN (eth2) as 192.168.2.254
 
+Example of what it should look like:
+
 ![Configured ERL with Bypass](https://i.imgur.com/LrEg9WW.png)
+
+Good idea to backup your ERL configuration if everything is in working order.
