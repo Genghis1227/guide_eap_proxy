@@ -15,6 +15,8 @@ This guide configures the ERL with the following for the ports:
 
 ## 1. Setup
 
+Record the MAC address of your AT&T router, this is needed in section 4
+
 Install [WinSCP](https://winscp.net/eng/index.php) - To transfer files
 
 Install [Putty](https://www.putty.org/) - To configure the router
@@ -47,7 +49,7 @@ Copy using binary mode eap_proxy.sh to /config/scripts/post-config.d/
 
 Copy using binary mode eap_proxy.py to /config/scripts/
 
-Edit the eap_proxy.sh file that as just uploaded in WinSCP (Go to //root/config/scripts/post-config.d > Right-click on file > Edit)
+Edit the eap_proxy.sh file that as just uploaded in WinSCP (Go to /config/scripts/post-config.d > Right-click on file > Edit)
 
 ![Editing eap_proxy.sh](https://i.imgur.com/u1NZa1D.png)
 
@@ -68,6 +70,10 @@ Change permissions of files for execution using the following commands
 Configure router using the below, this will setup the firewall, all interfaces and give you working IPv6
 
 I typically run sections this in batches then type in "save;commit"
+
+Remember to replace aa:bb:cc:dd:ee:ff in this line to reflect the mac address of your AT&T Router
+
+	set interfaces ethernet eth0 vif 0 mac 'aa:bb:cc:dd:ee:ff'
 
 In Putty, type **"configure"** then Enter to get into the configure prompt
 
