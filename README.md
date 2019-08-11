@@ -29,7 +29,7 @@ Set IP of computer to 192.168.1.100, 255.255.255.0, 192.168.1.1 - [How to: Chang
 
 Login to the ERL EdgeOS by going to https://192.168.1.1 in your browser
 
-## 2. Backup original configuration
+## 2. Backup original configuration (optional)
 
 Backup config of the ERL (System > Back Up Config) - Old firmware
 
