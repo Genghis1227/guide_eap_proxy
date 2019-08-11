@@ -60,7 +60,7 @@ Configure router using the below, this will setup the firewall, all interfaces a
 
 I typically run sections this in batches then type in "save;commit"
 
-In Putty, type "configure" then Enter to get into the configure prompt
+In Putty, type **"configure"** then Enter to get into the configure prompt
 
 Then, copy & paste the following:
 
