@@ -21,7 +21,7 @@ From a reset ERL
 
 Plug in a computer to eth0
 
-Set IP of computer to 192.168.1.100, 255.255.255.0, 192.168.1.1
+Set IP of computer to 192.168.1.100, 255.255.255.0, 192.168.1.1 (https://www.thewindowsclub.com/change-ip-address-windows-10)
 
 Login to the ERL EdgeOS by going to https://192.168.1.1 in your browser
 
@@ -35,7 +35,7 @@ Backup config of the ERL (System > Back Up Config) - New firmware
 
 Downloaded eap-proxy files from: https://github.com/jaysoffian/eap_proxy
 
-Connect to ERL using WinSCP
+Connect to ERL using WinSCP (IP address for the ERL is 192.168.1.1)
 
 Copy using binary mode eap_proxy.sh to /config/scripts/post-config.d/
 
@@ -43,7 +43,7 @@ Copy using binary mode eap_proxy.py to /config/scripts/
 
 Connect to ERL with Putty
 
-Change permissions of files for execution
+Change permissions of files for execution using the following commands
 
 	sudo chmod +x /config/scripts/post-config.d/eap_proxy.sh
 	sudo chmod +x /config/scripts/eap_proxy.py
@@ -52,7 +52,7 @@ Configure router using the below, this will setup the firewall, all interfaces a
 
 I typically run sections this in batches then type in "save;commit"
 
-Type "configure" then Enter to get into the configure prompt
+In Putty, type "configure" then Enter to get into the configure prompt
 
 Then, copy & paste the following:
 
