@@ -7,7 +7,7 @@ Kudos to https://www.reddit.com/user/SScorpio/ that provided most if not all of 
 
 I've used this only with a EdgeRouter Lite (ERL), but probably would work with most EdgeOS routers.
 
-This guide configures the ERL with the following for the ports:
+This guide configures the ERL ports with the following:
 
 	eth0 = WAN (the connection from the ONT)
 	eth1 = AT&T Router
