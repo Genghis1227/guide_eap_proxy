@@ -13,6 +13,8 @@ This guide configures the ERL with the following for the ports:
 	eth1 = AT&T Router
 	eth2 = LAN
 
+## Setup
+
 Install WinSCP (https://winscp.net/eng/index.php) - To transfer files
 
 Install Putty (https://www.putty.org/) - To configure the router
@@ -25,6 +27,8 @@ Set IP of computer to 192.168.1.100, 255.255.255.0, 192.168.1.1 (https://www.the
 
 Login to the ERL EdgeOS by going to https://192.168.1.1 in your browser
 
+## Backup Original Configuration
+
 Backup config of the ERL (System > Back Up Config) - Old firmware
 
 Check www.ubnt.com/download to see if there is an updated firmware, download (if desired)
@@ -32,6 +36,8 @@ Check www.ubnt.com/download to see if there is an updated firmware, download (if
 Upgrade firmware of device (if desired) (System > Upgrade System Image)
 
 Backup config of the ERL (System > Back Up Config) - New firmware
+
+## Transfer EAP_Proxy files
 
 Downloaded eap-proxy files from: https://github.com/jaysoffian/eap_proxy
 
@@ -48,6 +54,8 @@ Change permissions of files for execution using the following commands
 	sudo chmod +x /config/scripts/post-config.d/eap_proxy.sh
 	sudo chmod +x /config/scripts/eap_proxy.py
 	
+## Configure the router
+
 Configure router using the below, this will setup the firewall, all interfaces and give you working IPv6
 
 I typically run sections this in batches then type in "save;commit"
@@ -249,6 +257,8 @@ Then, copy & paste the following:
 	save;commit
 	
 Once everything returns and committed then "exit" from the configure mode
+
+## Hooking everything up
 
 Enter the following to monitor the data:
 
