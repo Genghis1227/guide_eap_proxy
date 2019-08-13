@@ -69,7 +69,7 @@ Change permissions of files for execution using the following commands
 
 Configure router using the below, this will setup the firewall, all interfaces and give you working IPv6
 
-I typically run sections this in batches then type in "save;commit"
+I typically run these sections in batches then type in "save;commit" as shown below.  It's easier to troubleshoot if anything went wrong.
 
 Remember to replace aa:bb:cc:dd:ee:ff in this line to reflect the mac address of your AT&T Router
 
