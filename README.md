@@ -17,6 +17,8 @@ This guide configures the ERL ports with the following:
 
 Record the MAC address of your AT&T router, this is needed in section 4
 
+It's a good idea to also disable the WiFi on the AT&T router (optional).
+
 Install [WinSCP](https://winscp.net/eng/index.php) - To transfer files
 
 Install [Putty](https://www.putty.org/) - To configure the router
