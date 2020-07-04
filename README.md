@@ -97,6 +97,8 @@ Change it to:
 Remember to replace **aa:bb:cc:dd:ee:ff** in this line of the configuration section to reflect the mac address of your AT&T Router
 
 	set interfaces ethernet eth0 vif 0 mac 'aa:bb:cc:dd:ee:ff'
+	
+For IPv6, replace duid **'xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx'** with your duid in the optional section of the config
 
 In Putty, type **"configure"** then Enter to get into the configure prompt
 
