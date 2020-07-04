@@ -5,6 +5,10 @@ Searching multiple places I could only find snippets and partial code.  After pi
 
 Kudos to https://www.reddit.com/user/SScorpio/ that provided most if not all of the script from https://www.reddit.com/r/uverse/comments/9ii4t5/eli5_how_to_use_eaproxy_and_att_uverse/e9fbtoa?utm_source=share&utm_medium=web2x
 
+Thanks to user [h-parks](https://github.com/h-parks) for figuring out and merging the IPv6 portion from [jimbair](https://github.com/jimbair) posted [here](https://github.com/jaysoffian/eap_proxy/pull/36/commits/0abe21cfcfd181372cf1dbee91bdeea5926ff1e6) from the original eap_proxy.
+
+For the record, I currently do not use this setup but still maintain and update this guide as users continue to find use for it.
+
 I've used this only with a EdgeRouter Lite (ERL), but probably would work with most EdgeOS routers.
 
 This guide configures the ERL ports with the following:
@@ -15,7 +19,14 @@ This guide configures the ERL ports with the following:
 
 ## 1. Setup
 
-Record the MAC address of your AT&T router, this is needed in section 4
+Record the MAC address of your AT&T router, this is needed in section 4.  If using IPv6, record the duid value required.
+
+From [jimbair](https://github.com/jimbair):
+
+	For IPv6, be sure to change the duid value to the duid of your AT&T router, or wait ~2 weeks for the lease to expire to get a fresh lease. 
+	You can sniff the traffic from your AT&T router to find the duid, or generate one with a script like gen-duid.sh from pfatt on github.
+
+	For firewall rules, note that the setup wizard creates rules named WANv6_* if you check the box to enable IPv6, whereas the above rules are WAN6_*.
 
 Factory reset your AT&T router (optional)
 
@@ -94,49 +105,109 @@ Then, copy & paste the following:
 	set firewall all-ping enable
 	set firewall broadcast-ping disable
 	set firewall ipv6-name IPv6_WAN_IN default-action drop
-	set firewall ipv6-name IPv6_WAN_IN description 'IPv6 packets from the Internet to LAN'
-	set firewall ipv6-name IPv6_WAN_IN rule 1 action accept
-	set firewall ipv6-name IPv6_WAN_IN rule 1 description 'Allow established sessions'
-	set firewall ipv6-name IPv6_WAN_IN rule 1 state established enable
-	set firewall ipv6-name IPv6_WAN_IN rule 1 state invalid disable
-	set firewall ipv6-name IPv6_WAN_IN rule 1 state new disable
-	set firewall ipv6-name IPv6_WAN_IN rule 1 state related enable
-	set firewall ipv6-name IPv6_WAN_IN rule 2 action drop
-	set firewall ipv6-name IPv6_WAN_IN rule 2 state established disable
-	set firewall ipv6-name IPv6_WAN_IN rule 2 state invalid enable
-	set firewall ipv6-name IPv6_WAN_IN rule 2 state new disable
-	set firewall ipv6-name IPv6_WAN_IN rule 2 state related disable
-	set firewall ipv6-name IPv6_WAN_IN rule 5 action accept
-	set firewall ipv6-name IPv6_WAN_IN rule 5 description 'Allow ICMPv6'
-	set firewall ipv6-name IPv6_WAN_IN rule 5 log disable
-	set firewall ipv6-name IPv6_WAN_IN rule 5 protocol icmpv6
+	set firewall ipv6-name IPv6_WAN_IN description 'WAN to internal'
+	set firewall ipv6-name IPv6_WAN_IN enable-default-log
+	set firewall ipv6-name IPv6_WAN_IN rule 10 action accept
+	set firewall ipv6-name IPv6_WAN_IN rule 10 description 'Allow established/related'
+	set firewall ipv6-name IPv6_WAN_IN rule 10 state established enable
+	set firewall ipv6-name IPv6_WAN_IN rule 10 state related enable
+	set firewall ipv6-name IPv6_WAN_IN rule 20 action drop
+	set firewall ipv6-name IPv6_WAN_IN rule 20 description 'Drop invalid state'
+	set firewall ipv6-name IPv6_WAN_IN rule 20 log enable
+	set firewall ipv6-name IPv6_WAN_IN rule 20 state invalid enable
+	set firewall ipv6-name IPv6_WAN_IN rule 30 action accept
+	set firewall ipv6-name IPv6_WAN_IN rule 30 description 'Allow ICMPv6 destination-unreachable'
+	set firewall ipv6-name IPv6_WAN_IN rule 30 icmpv6 type destination-unreachable
+	set firewall ipv6-name IPv6_WAN_IN rule 30 protocol icmpv6
+	save;commit
+
+	set firewall ipv6-name IPv6_WAN_IN rule 31 action accept
+	set firewall ipv6-name IPv6_WAN_IN rule 31 description 'Allow ICMPv6 packet-too-big'
+	set firewall ipv6-name IPv6_WAN_IN rule 31 icmpv6 type packet-too-big
+	set firewall ipv6-name IPv6_WAN_IN rule 31 protocol icmpv6
+	set firewall ipv6-name IPv6_WAN_IN rule 32 action accept
+	set firewall ipv6-name IPv6_WAN_IN rule 32 description 'Allow ICMPv6 time-exceeded'
+	set firewall ipv6-name IPv6_WAN_IN rule 32 icmpv6 type time-exceeded
+	set firewall ipv6-name IPv6_WAN_IN rule 32 protocol icmpv6
+	set firewall ipv6-name IPv6_WAN_IN rule 33 action accept
+	set firewall ipv6-name IPv6_WAN_IN rule 33 description 'Allow ICMPv6 parameter-problem'
+	set firewall ipv6-name IPv6_WAN_IN rule 33 icmpv6 type parameter-problem
+	set firewall ipv6-name IPv6_WAN_IN rule 33 protocol icmpv6
+	set firewall ipv6-name IPv6_WAN_IN rule 34 action accept
+	set firewall ipv6-name IPv6_WAN_IN rule 34 description 'Allow ICMPv6 echo-request'
+	set firewall ipv6-name IPv6_WAN_IN rule 34 icmpv6 type echo-request
+	set firewall ipv6-name IPv6_WAN_IN rule 34 limit burst 1
+	set firewall ipv6-name IPv6_WAN_IN rule 34 limit rate 600/minute
+	set firewall ipv6-name IPv6_WAN_IN rule 34 protocol icmpv6
+	set firewall ipv6-name IPv6_WAN_IN rule 35 action accept
+	set firewall ipv6-name IPv6_WAN_IN rule 35 description 'Allow ICMPv6 echo-reply'
+	set firewall ipv6-name IPv6_WAN_IN rule 35 icmpv6 type echo-reply
+	set firewall ipv6-name IPv6_WAN_IN rule 35 limit burst 1
+	set firewall ipv6-name IPv6_WAN_IN rule 35 limit rate 600/minute
+	set firewall ipv6-name IPv6_WAN_IN rule 35 protocol icmpv6
 	save;commit
 
 	set firewall ipv6-name IPv6_WAN_LOCAL default-action drop
-	set firewall ipv6-name IPv6_WAN_LOCAL description 'IPv6 packets from the Internet to the router'
+	set firewall ipv6-name IPv6_WAN_LOCAL description 'WAN to router'
+	set firewall ipv6-name IPv6_WAN_LOCAL enable-default-log
 	set firewall ipv6-name IPv6_WAN_LOCAL rule 10 action accept
-	set firewall ipv6-name IPv6_WAN_LOCAL rule 10 description 'Allow established sessions'
-	set firewall ipv6-name IPv6_WAN_LOCAL rule 10 log disable
+	set firewall ipv6-name IPv6_WAN_LOCAL rule 10 description 'Allow established/related'
 	set firewall ipv6-name IPv6_WAN_LOCAL rule 10 state established enable
-	set firewall ipv6-name IPv6_WAN_LOCAL rule 10 state invalid disable
-	set firewall ipv6-name IPv6_WAN_LOCAL rule 10 state new disable
 	set firewall ipv6-name IPv6_WAN_LOCAL rule 10 state related enable
 	set firewall ipv6-name IPv6_WAN_LOCAL rule 20 action drop
 	set firewall ipv6-name IPv6_WAN_LOCAL rule 20 description 'Drop invalid state'
-	set firewall ipv6-name IPv6_WAN_LOCAL rule 20 log disable
-	set firewall ipv6-name IPv6_WAN_LOCAL rule 20 state established disable
 	set firewall ipv6-name IPv6_WAN_LOCAL rule 20 state invalid enable
-	set firewall ipv6-name IPv6_WAN_LOCAL rule 20 state new disable
-	set firewall ipv6-name IPv6_WAN_LOCAL rule 20 state related disable
+	set firewall ipv6-name IPv6_WAN_LOCAL rule 30 action accept
+	set firewall ipv6-name IPv6_WAN_LOCAL rule 30 description 'Allow ICMPv6 destination-unreachable'
+	set firewall ipv6-name IPv6_WAN_LOCAL rule 30 icmpv6 type destination-unreachable
+	set firewall ipv6-name IPv6_WAN_LOCAL rule 30 protocol icmpv6
+	set firewall ipv6-name IPv6_WAN_LOCAL rule 31 action accept
+	set firewall ipv6-name IPv6_WAN_LOCAL rule 31 description 'Allow ICMPv6 packet-too-big'
+	set firewall ipv6-name IPv6_WAN_LOCAL rule 31 icmpv6 type packet-too-big
+	set firewall ipv6-name IPv6_WAN_LOCAL rule 31 protocol icmpv6
+	save;commit
+
+	set firewall ipv6-name IPv6_WAN_LOCAL rule 32 action accept
+	set firewall ipv6-name IPv6_WAN_LOCAL rule 32 description 'Allow ICMPv6 time-exceeded'
+	set firewall ipv6-name IPv6_WAN_LOCAL rule 32 icmpv6 type time-exceeded
+	set firewall ipv6-name IPv6_WAN_LOCAL rule 32 protocol icmpv6
+	set firewall ipv6-name IPv6_WAN_LOCAL rule 33 action accept
+	set firewall ipv6-name IPv6_WAN_LOCAL rule 33 description 'Allow ICMPv6 parameter-problem'
+	set firewall ipv6-name IPv6_WAN_LOCAL rule 33 icmpv6 type parameter-problem
+	set firewall ipv6-name IPv6_WAN_LOCAL rule 33 protocol icmpv6
+	set firewall ipv6-name IPv6_WAN_LOCAL rule 34 action accept
+	set firewall ipv6-name IPv6_WAN_LOCAL rule 34 description 'Allow ICMPv6 echo-request'
+	set firewall ipv6-name IPv6_WAN_LOCAL rule 34 icmpv6 type echo-request
+	set firewall ipv6-name IPv6_WAN_LOCAL rule 34 limit burst 5
+	set firewall ipv6-name IPv6_WAN_LOCAL rule 34 limit rate 5/second
+	set firewall ipv6-name IPv6_WAN_LOCAL rule 34 protocol icmpv6
+	save;commit
+
+	set firewall ipv6-name IPv6_WAN_LOCAL rule 35 action accept
+	set firewall ipv6-name IPv6_WAN_LOCAL rule 35 description 'Allow ICMPv6 echo-reply'
+	set firewall ipv6-name IPv6_WAN_LOCAL rule 35 icmpv6 type echo-reply
+	set firewall ipv6-name IPv6_WAN_LOCAL rule 35 limit burst 5
+	set firewall ipv6-name IPv6_WAN_LOCAL rule 35 limit rate 5/second
+	set firewall ipv6-name IPv6_WAN_LOCAL rule 35 protocol icmpv6
+	set firewall ipv6-name IPv6_WAN_LOCAL rule 36 action accept
+	set firewall ipv6-name IPv6_WAN_LOCAL rule 36 description 'Allow ICMPv6 Router Advertisement'
+	set firewall ipv6-name IPv6_WAN_LOCAL rule 36 icmpv6 type router-advertisement
+	set firewall ipv6-name IPv6_WAN_LOCAL rule 36 protocol icmpv6
+	set firewall ipv6-name IPv6_WAN_LOCAL rule 37 action accept
+	set firewall ipv6-name IPv6_WAN_LOCAL rule 37 description 'Allow ICMPv6 Neighbor Solicitation'
+	set firewall ipv6-name IPv6_WAN_LOCAL rule 37 icmpv6 type neighbor-solicitation
+	set firewall ipv6-name IPv6_WAN_LOCAL rule 37 protocol icmpv6
+	set firewall ipv6-name IPv6_WAN_LOCAL rule 38 action accept
+	set firewall ipv6-name IPv6_WAN_LOCAL rule 38 description 'Allow ICMPv6 Neighbor Advertisement'
+	set firewall ipv6-name IPv6_WAN_LOCAL rule 38 icmpv6 type neighbor-advertisement
+	set firewall ipv6-name IPv6_WAN_LOCAL rule 38 protocol icmpv6
+	save;commit
+
 	set firewall ipv6-name IPv6_WAN_LOCAL rule 50 action accept
-	set firewall ipv6-name IPv6_WAN_LOCAL rule 50 description 'Allow ICMPv6'
-	set firewall ipv6-name IPv6_WAN_LOCAL rule 50 log disable
-	set firewall ipv6-name IPv6_WAN_LOCAL rule 50 protocol icmpv6
-	set firewall ipv6-name IPv6_WAN_LOCAL rule 60 action accept
-	set firewall ipv6-name IPv6_WAN_LOCAL rule 60 description 'Allow DHCPv6'
-	set firewall ipv6-name IPv6_WAN_LOCAL rule 60 destination port 546
-	set firewall ipv6-name IPv6_WAN_LOCAL rule 60 protocol udp
-	set firewall ipv6-name IPv6_WAN_LOCAL rule 60 source port 547
+	set firewall ipv6-name IPv6_WAN_LOCAL rule 50 description 'Allow DHCPv6'
+	set firewall ipv6-name IPv6_WAN_LOCAL rule 50 destination port 546
+	set firewall ipv6-name IPv6_WAN_LOCAL rule 50 protocol udp
+	set firewall ipv6-name IPv6_WAN_LOCAL rule 50 source port 547
 	save;commit
 
 	set firewall ipv6-receive-redirects disable
@@ -187,11 +258,6 @@ Then, copy & paste the following:
 	set interfaces ethernet eth0 vif 0 dhcp-options default-route update
 	set interfaces ethernet eth0 vif 0 dhcp-options default-route-distance 210
 	set interfaces ethernet eth0 vif 0 dhcp-options name-server update
-	set interfaces ethernet eth0 vif 0 dhcpv6-pd pd 0 interface switch0 host-address '::1'
-	set interfaces ethernet eth0 vif 0 dhcpv6-pd pd 0 interface switch0 prefix-id 1
-	set interfaces ethernet eth0 vif 0 dhcpv6-pd pd 0 interface switch0 service slaac
-	set interfaces ethernet eth0 vif 0 dhcpv6-pd pd 0 prefix-length /60
-	set interfaces ethernet eth0 vif 0 dhcpv6-pd rapid-commit enable
 	set interfaces ethernet eth0 vif 0 firewall in ipv6-name IPv6_WAN_IN
 	set interfaces ethernet eth0 vif 0 firewall in name WAN_IN
 	set interfaces ethernet eth0 vif 0 firewall local ipv6-name IPv6_WAN_LOCAL
@@ -206,18 +272,6 @@ Then, copy & paste the following:
 
 	set interfaces ethernet eth2 address 192.168.2.254/24
 	set interfaces ethernet eth2 description LAN
-	set interfaces ethernet eth2 ipv6 dup-addr-detect-transmits 1
-	set interfaces ethernet eth2 ipv6 router-advert cur-hop-limit 64
-	set interfaces ethernet eth2 ipv6 router-advert link-mtu 0
-	set interfaces ethernet eth2 ipv6 router-advert managed-flag false
-	set interfaces ethernet eth2 ipv6 router-advert max-interval 600
-	set interfaces ethernet eth2 ipv6 router-advert other-config-flag false
-	set interfaces ethernet eth2 ipv6 router-advert prefix '::/64' autonomous-flag true
-	set interfaces ethernet eth2 ipv6 router-advert prefix '::/64' on-link-flag true
-	set interfaces ethernet eth2 ipv6 router-advert prefix '::/64' valid-lifetime 2592000
-	set interfaces ethernet eth2 ipv6 router-advert reachable-time 0
-	set interfaces ethernet eth2 ipv6 router-advert retrans-timer 0
-	set interfaces ethernet eth2 ipv6 router-advert send-advert true
 	set interfaces ethernet eth2 mtu 1500
 	set interfaces ethernet eth0 speed auto
 	set interfaces loopback lo
@@ -246,6 +300,27 @@ Then, copy & paste the following:
 	set service dns forwarding name-server 68.94.156.1
 	set service dns forwarding name-server 12.127.17.71
 	set service dns forwarding name-server 12.127.16.67
+	save;commit
+
+(Optional)
+
+	set interfaces ethernet eth0 vif 0 dhcpv6-pd duid 'xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx'
+	save;commit
+
+(Cont.)
+
+	set interfaces ethernet eth0 vif 0 dhcpv6-pd pd 1 interface eth2 host-address '::1'
+	set interfaces ethernet eth0 vif 0 dhcpv6-pd pd 1 interface eth2 no-dns
+	set interfaces ethernet eth0 vif 0 dhcpv6-pd pd 1 interface eth2 prefix-id ':0'
+	set interfaces ethernet eth0 vif 0 dhcpv6-pd pd 1 interface eth2 service slaac
+	set interfaces ethernet eth0 vif 0 dhcpv6-pd pd 1 prefix-length 60
+	set interfaces ethernet eth0 vif 0 dhcpv6-pd prefix-only
+	set interfaces ethernet eth0 vif 0 dhcpv6-pd rapid-commit disable
+	set interfaces ethernet eth0 vif 0 firewall in ipv6-name IPv6_WAN_IN
+	set interfaces ethernet eth0 vif 0 firewall local ipv6-name IPv6_WAN_LOCAL
+	set interfaces ethernet eth0 vif 0 ipv6 dup-addr-detect-transmits 1
+	set system offload ipv6 forwarding enable
+	set system offload ipv6 vlan enable
 	save;commit
 
 	set service gui http-port 80
@@ -281,7 +356,7 @@ Then, copy & paste the following:
 	set service upnp2 nat-pmp enable
 	set service upnp2 secure-mode enable
 	set service upnp2 wan eth0.0
-	save;commit
+	save;commit  
 	
 Once everything returns and committed then "exit" from the configure mode
 
