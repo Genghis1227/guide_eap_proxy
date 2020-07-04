@@ -3,7 +3,7 @@ Using the files from https://github.com/jaysoffian/eap_proxy these are the instr
 
 Searching multiple places I could only find snippets and partial code.  After piecing these together I got a working config.  
 
-Kudos to https://www.reddit.com/user/SScorpio/ that provided most if not all of the script from https://www.reddit.com/r/uverse/comments/9ii4t5/eli5_how_to_use_eaproxy_and_att_uverse/e9fbtoa?utm_source=share&utm_medium=web2x
+Kudos to https://www.reddit.com/user/SScorpio/ that provided most if not all of the script from https://www.reddit.com/r/uverse/comments/9ii4t5/eli5_how_to_use_eaproxy_and_att_uverse/e9fbtoa/
 
 Thanks to user [h-parks](https://github.com/h-parks) for figuring out and merging the IPv6 portion from [jimbair](https://github.com/jimbair) posted [here](https://github.com/jaysoffian/eap_proxy/pull/36/commits/0abe21cfcfd181372cf1dbee91bdeea5926ff1e6) from the original eap_proxy.
 
